@@ -285,7 +285,12 @@ context.beginPath();
 	?>
 	context.moveTo(<?php echo($i0); ?>, <?php echo($j0); ?>);
 	context.lineTo(<?php echo($i1); ?>, <?php echo($j1); ?>);
-    context.lineWidth = 3;
+    context.lineWidth = 
+	<?php $gr=4;  //micsoram grosimea liniei cand sunt suprapuneri
+	if($ctCol!=0)
+		echo($gr-2);
+	else
+		echo($gr);?>;
     context.strokeStyle = "<?php echo($culori[$ctCol]); ?>";
     context.stroke();
 	
