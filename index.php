@@ -1,5 +1,44 @@
 <html>
 <head>
+<title>Index</title>
+<style type="text/css">
+.swe {
+position:absolute;
+left: 132px;
+top: 349px;
+width: 107px;
+height: 42px;
+}
+
+.swe2 {
+position:absolute;
+left: 359px;
+top: 272px;
+width: 143px;
+height: 35px;
+}
+.swe3 {
+position:absolute;
+left: 678px;
+top: 238px;
+width: 126px;
+height: 31px;
+}
+.swe4 {
+position:absolute;
+left: 400px;
+top: 511px;
+width: 126px;
+height: 62px;
+}
+.swe5 {
+position:absolute;
+left: 560px;
+top: 540px;
+width: 126px;
+height: 62px;
+}
+</style>
 <style>
 body {
 0px;
@@ -11,8 +50,30 @@ border: 0px
 
 </style>
 </head>
-<body>
 
+<body>
+<img src="head.png" width="965" height="429" style="position: relative; top: 0; left: 0;"/>
+<a href="index.php">
+<img src="main.png" width="107" height="42" class="swe"/>
+</a>
+<a href="gen.html">
+<img src="generator.png" width="138" height="91" class="swe2"/>
+</a>
+<a href="about.html">
+<img src="about.png" width="392" height="168" class="swe3">
+</a>
+<center>
+<p><h2>Vrei o parola sigura si usor de retinut?</h2></p>
+<p>Dimensiune:</p></center>
+<form class='swe5'action="index.php?go=1" method="POST">
+<input type="text" name="dimensiune"><br>
+<input type="submit" value="Genereaza una">
+</form>
+<br><br><br><br>
+<?php
+if(isset($_GET['go']))
+{?>
+<center>
 <canvas id="myCanvas" width="578" height="208">
 </canvas>
 
@@ -37,9 +98,12 @@ context.drawImage(imagePaper,1, 2, 578,208);
 onload(canvas, context);
 };
 
-imagePaper.src = "keyboard1.png";
+imagePaper.src = "keyboard1.png"; 
 }
 
+
+
+	
 
 function drawlines(canvas, context)
 {
@@ -47,7 +111,7 @@ context.beginPath();
 
 <?php 
 	if(isset($_POST['dimensiune'])) //primesc dimensiunea parolei minim 5 ch max 16, default 6 
-		{$dim=$_POST['dimensiune'];
+		{$dim=intval($_POST['dimensiune']);
 			if($dim<5)
 				$dim=5;
 			else
@@ -172,7 +236,7 @@ context.beginPath();
 	}
 	
 	$nSup=0; //numarul de suprapuneri ale liniilor
-	for($p1=1;$p1<$dim-2;$p1++)
+	for($p1=1;$p1<$dim-2;$p1++) //verificam suprapunerile
 		for($p2=$p1+1;$p2<$dim-1;$p2++)
 			{if($poz[$p1][1]==$poz[$p2+1][1] && $poz[$p1][0]==$poz[$p2+1][0] && $poz[$p1-1][1]==$poz[$p2][1] && $poz[$p1-1][0]==$poz[$p2][0])
 				{
@@ -189,6 +253,7 @@ context.beginPath();
 		$sw=0;
 	}
 	
+	//incepem desenarea pe canvas-ul desenat anterior 
 	  $culori[0]='green'; //vector culori ale linilor
 	  $culori[1]='red';
 	  $culori[2]='blue';
@@ -199,20 +264,23 @@ context.beginPath();
 	$ofLinie=11;
 	$ofCol=40;
 
-	$i0=$offseti + $poz[0][1] * $ofCol + $poz[0][0] * $ofLinie;
+	$i0=$offseti + $poz[0][1] * $ofCol + $poz[0][0] * $ofLinie; //punctul initial
 	$j0=$offsetj + $poz[0][0]*40; ?>
+    
+	
 	context.fillStyle ="CC0000"
-	context.arc(<?php echo($i0); ?>, <?php echo($j0); ?>,5,0,Math.PI*2,true); <?php
+	context.arc(<?php echo($i0); ?>, <?php echo($j0); ?>,5,0,Math.PI*2,true); 
+	setTimeout(function alpha() {  <?php
  for($ct=1; $ct<$dim; $ct++)
  {
 	$ddd=0;
 	$i1=$offseti + $poz[$ct][1] * $ofCol + $poz[$ct][0] * $ofLinie;
 	$j1=$offsetj + $poz[$ct][0]*43;
-	for($ceva=1;$ceva<=$nSup;$ceva++) // nu mai stiu nume de variabile
+	for($ceva=1;$ceva<=$nSup;$ceva++) // nu mai stiu nume de variabile :)
 		if($ct-1==$sup[$ceva])
 			{$ctCol++;
 			$ddd=1;
-			}
+			} //desenam linie vectorial si apoi punctul
 			
 	?>
 	context.moveTo(<?php echo($i0); ?>, <?php echo($j0); ?>);
@@ -229,13 +297,13 @@ context.beginPath();
 	context.fill();
 
 	<?php
-	$i0=$i1;
+	$i0=$i1; // notam ca punct de origine punctul precedent
 	$j0=$j1;
-	if($ddd==1)
+	if($ddd==1) 
 		$ctCol--;
  }
 ?>
-
+}, 200);
 }
 
 
@@ -243,12 +311,13 @@ drawbackground(canvas, context, drawlines);
 
 
 </script>
-<p>
+<p><h1>
 <?php
-echo($res . ' - ' . $nSup);
+echo($res);
 ?>
-</p>
-</body>
+</h1></p>
+<?php } ?>
+</center>
+<body>
 </html>
-
 
